@@ -1,54 +1,50 @@
-import './App.css';
-import { a, b } from './components/Products/Products';
-import Products from './components/Products/Products';
-import { useState } from 'react';
-function App() {
-  // state variable
-  // inc
-  // dec
-  let [cart, setCart] = useState({});
-  function increaseQuantity(product) {
-    const newCart = { ...cart };
-    // if(cart[product.id])
-    if (!newCart[product.id]) {
-      newCart[product.id] = {
-        ...product,
-        quantity: 0
-      };
-    }
-    newCart[product.id].quantity += 1;
-    console.log(newCart);
-    setCart(newCart);
-  }
+import React, { useState } from 'react';
 
-  function decreaseQuantity(product) {
-    const newCart = { ...cart };
-    if (!newCart[product.id]) return;
-    newCart[product.id].quantity -= 1;
-    if (newCart[product.id].quantity <= 0) {
-      delete newCart[product.id];
-    }
-    setCart(newCart);
-  }
+const App = () => {
+  const [categories] = useState(['Electronics', 'Books', 'Clothing', 'Furniture']);
+  const [products] = useState([
+    { id: 1, name: 'Laptop', category: 'Electronics' },
+    { id: 2, name: 'Smartphone', category: 'Electronics' },
+    { id: 3, name: 'Tablet', category: 'Electronics' },
+    { id: 4, name: 'Science Fiction Book', category: 'Books' },
+    { id: 5, name: 'Cookbook', category: 'Books' },
+    { id: 6, name: 'T-Shirt', category: 'Clothing' },
+    { id: 7, name: 'Jeans', category: 'Clothing' },
+    { id: 8, name: 'Jacket', category: 'Clothing' },
+    { id: 9, name: 'Sofa', category: 'Furniture' },
+    { id: 10, name: 'Dining Table', category: 'Furniture' },
+    { id: 11, name: 'Chair', category: 'Furniture' },
+    { id: 12, name: 'Bookshelf', category: 'Furniture' },
+  ]);
+  const [selectedCategory, setSelectedCategory] = useState('All');
 
-  console.log(a, b);
+  const handleCategoryClick = (category) => {
+    setSelectedCategory(category);
+  };
+
+  const filteredProducts = selectedCategory === 'All'
+    ? products
+    : products.filter(product => product.category === selectedCategory);
+
   return (
-    <div className="App">
-      <Products cart={cart} increaseQuantity={increaseQuantity} decreaseQuantity={decreaseQuantity} />
+    <div>
+      <h1>Product Categories</h1>
+      <div>
+        <button onClick={() => handleCategoryClick('All')}>All</button>
+        {categories.map(category => (
+          <button key={category} onClick={() => handleCategoryClick(category)}>
+            {category}
+          </button>
+        ))}
+      </div>
+      <h2>Products</h2>
+      <ul>
+        {filteredProducts.map(product => (
+          <li key={product.id}>{product.name}</li>
+        ))}
+      </ul>
     </div>
   );
-}
+};
 
 export default App;
-
-// {1:{id: 1, quantity: 11}, 2:{id: 2, quantity: 10}, 3:{id: 3, quantity: 10}, 4:{id: 4, quantity: 10}}
-
-// button
-// - 1 +
-
-// let a = {b:10, c:20};
-//a.b = 30;
-// let b = {...a};
-
-// a => 1234
-// a => 12
